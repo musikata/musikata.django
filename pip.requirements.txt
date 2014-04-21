@@ -1,0 +1,1 @@
+-e git://github.com/django/django.git@405b13fe83e3d8c9079545429d40c434eb496893#egg=Django-origin/HEAD
