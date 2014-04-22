@@ -1,3 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+
+class MusikataClientTestCase(TestCase):
+    def test_client_view(self):
+        response = Client().get('/client/')
+        self.assertEqual(response.status_code, 200)

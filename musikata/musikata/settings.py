@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'path',
+    'musikata_client',
     'rest_framework',
     'django_nose',
 )
