@@ -53,12 +53,35 @@ class PathNodeTestCase(TestCase):
 
 class UserPathNodeTestCase(TestCase):
     def test_create_user_path_node(self):
-        user = User.objects.create_user('john', 'lennon@thebeatles.com',
-                                        'johnpassword')
+        user = User.objects.create_user('louis', 'louis@satchmo.com', 'horn')
         path_node = PathNode.objects.create()
         user_path_node = UserPathNode.objects.create(user=user,
                                                      path_node=path_node)
         self.assertIsNotNone(user_path_node.id)
+
+    def test_update_user_path_node(self):
+        # Create node in db.
+        user = User.objects.create_user('louis', 'louis@satchmo.com', 'horn')
+        path_node = PathNode.objects.create(path_id='testPath', xpath='/A')
+        UserPathNode.objects.create(user=user, path_node=path_node)
+
+        # post data.
+        post_url = '/path/userpathnode/{}/{}/'.format(user.id, path_node.id)
+        response = Client().post(post_url, {'status': 'completed'})
+
+        # Check response.
+        self.assertEqual(response.status_code, 200)
+
+        # Check that node was updated.
+        updated_user_path_node = UserPathNode.objects.filter(
+            user__id=user.id).filter(path_node__id=path_node.id).first()
+        self.assertEqual(updated_user_path_node.status, 'completed')
+
+    def xtest_create_user_path_node(self):
+        # Post data.
+        # check that node was created.
+        pass
+
 
     def xtest_get_userpathnode(self):
         # Should be able to get UserPathNode

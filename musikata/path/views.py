@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .models import PathNode, UserPathNode
 from .serializers import UserPathNodeSerializer
@@ -35,8 +36,23 @@ def get_userpath(request, path_id):
         'user_path_nodes': serialized_user_path_nodes
     }))
 
-def get_userpathnode(request):
-    return HttpResponse("stubbo")
+def userpathnode(request, user_id=None, node_id=None):
+    # If get, fetch and return the user path node.
+    if request.method == 'GET':
+        pass
+    # If post, update or create the user path node.
+    elif request.method == 'POST':
+        user_path_node = UserPathNode.objects.filter(
+            user__id=user_id).filter(path_node__id=node_id).first()
+        if user_path_node:
+            user_path_node.status = request.POST['status']
+        else:
+            user = User.objects.get(pk=user_id)
+            path_node = PathNode.objects.get(pk=node_id)
+            user_path_node = UserPathNode(user=user, path_node=path_node,
+                                          status=request.POST['status'])
+        user_path_node.save()
+    return HttpResponse('')
 
 class UserPathNodeViewSet(viewsets.ModelViewSet):
     queryset = UserPathNode.objects.all()
