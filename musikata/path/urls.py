@@ -10,5 +10,5 @@ router.register(r'userpathnodes', views.UserPathNodeViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^userpathnode/', views.get_userpathnode, name='userpathnode'),
-    url(r'^userpath/', views.get_userpath, name='userpath'),
+    url(r'^userpath/(?P<path_id>.*)/$', views.get_userpath, name='userpath'),
 ]

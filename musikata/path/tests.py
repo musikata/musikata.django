@@ -6,19 +6,44 @@ from .models import PathNode, UserPathNode
 
 
 class UserPathTestCase(TestCase):
+
+    def setUp(self):
+        # Setup path.
+        path_nodes = [
+            PathNode(path_id='testPath', xpath='/'),
+            PathNode(path_id='testPath', xpath='/A'),
+            PathNode(path_id='testPath', xpath='/B'),
+            PathNode(path_id='someOtherPath', xpath='/'),
+        ]
+        for path_node in path_nodes: path_node.save()
+
+        # Setup user path.
+        user = User.objects.create_user('louis', 'louis@satchmo.com', 'horn')
+        user_path_nodes = [
+            UserPathNode(user=user, path_node=path_nodes[1],
+                         status='completed'),
+            UserPathNode(user=user, path_node=path_nodes[3],
+                         status='completed'),
+        ]
+        for user_path_node in user_path_nodes: user_path_node.save()
+
     def test_user_path_endpoint(self):
-        """ When we do a get request to the UserPath endpoint,
-        we should get back a data object containing path node data
-        and user path node data."""
+        """ Should return data object containing path/userPath node data."""
         expected_data = {
-            'path_nodes': [],
-            'user_path_nodes': []
+            'path_nodes': [
+                {'path_id': 'testPath', 'xpath': '/'},
+                {'path_id': 'testPath', 'xpath': '/A'},
+                {'path_id': 'testPath', 'xpath': '/B'},
+            ],
+            'user_path_nodes': [
+                {'path_id': 'testPath', 'xpath': '/A', 'status': 'completed'},
+            ]
         }
 
-        response = Client().get('/path/userpath/')
-        self.assertEquals(response.status_code, 200)
+        response = Client().get('/path/userpath/testPath/')
+        self.assertEqual(response.status_code, 200)
         data = json.loads(response.content.decode())
-        self.assertEquals(data, expected_data)
+        self.assertEqual(data, expected_data)
 
 
 class PathNodeTestCase(TestCase):
