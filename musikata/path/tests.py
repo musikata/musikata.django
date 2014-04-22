@@ -1,7 +1,24 @@
+import json
 from django.test import TestCase
 from django.test import Client
-from .models import PathNode, UserPathNode
 from django.contrib.auth.models import User
+from .models import PathNode, UserPathNode
+
+
+class UserPathTestCase(TestCase):
+    def test_user_path_endpoint(self):
+        """ When we do a get request to the UserPath endpoint,
+        we should get back a data object containing path node data
+        and user path node data."""
+        expected_data = {
+            'path_nodes': [],
+            'user_path_nodes': []
+        }
+
+        response = Client().get('/path/userpath/')
+        self.assertEquals(response.status_code, 200)
+        data = json.loads(response.content.decode())
+        self.assertEquals(data, expected_data)
 
 
 class PathNodeTestCase(TestCase):

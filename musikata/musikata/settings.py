@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'path',
     'rest_framework',
+    'django_nose',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,3 +90,6 @@ REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGINATE_BY': 10
 }
+
+# Django-nose.
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
