@@ -1,1 +1,2 @@
--e git://github.com/django/django.git@405b13fe83e3d8c9079545429d40c434eb496893#egg=Django-origin/HEAD
+-e git://github.com/django/django.git@43510cffcbf64e73232da1d6209151c7232fd2b6#egg=Django-dev
+djangorestframework==2.3.13
