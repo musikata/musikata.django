@@ -1,9 +1,71 @@
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="http://localhost/musikata/code/musikata.theme/css/app.css">
   </head>
 
   <body>
-    Da Client
+    <div id="topBar" class="top-bar">
+      <ul class="title-area">
+        <li class="name">
+        <h1>
+          <a href="#">
+            <div id="logo"></div>
+          </a>
+        </h1>
+        </li>
+      </ul>
+    </div>
+
+    <div id="main">
+      <div id="content"></div>
+    </div>
+
+    <!-- Musikata globals -->
+    <script>
+      var Musikata = {};
+    </script>
+
+    <!-- Require config -->
+    <script>
+      // @TODO KLUDGE! EVENTUALLY WOULD INTERPOLATE THIS.
+      var cdnBaseUrl = 'http://localhost/musikata/code/musikata.browserClient';
+      var require = {
+        baseUrl: cdnBaseUrl
+      };
+
+      var loadScript = function(src, callback){
+        var script = document.createElement('script');
+        script.src = src;
+        if(script.addEventListener) {
+          script.addEventListener("load",callback,false);
+        } 
+        else if(script.readyState) {
+          script.onreadystatechange = callback;
+        }
+        document.body.appendChild(script);
+      }
+
+      var requirejsSrc = cdnBaseUrl + '/bower_components/requirejs/require.js';
+
+      loadScript(requirejsSrc, function(){
+        loadScript(cdnBaseUrl + '/test/require.common.js', function(){
+          require([
+          'musikata.browser_client/MusikataApp'
+          ], function(
+          app
+          ){
+            Musikata.app = app;
+
+            // Start the app.
+            Musikata.app.start({
+              contentRegion: '#content'
+            });
+          });
+
+        });
+      });
+
+    </script>
   </body>
 
 </html>
